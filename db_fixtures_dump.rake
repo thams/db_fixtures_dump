@@ -20,7 +20,7 @@ namespace :db do
         puts "Dumping model: " + m
         entries = model.find(:all, :order => 'id ASC')
 
-        formatted, increment, tab = '', 1, '  '
+        increment = 1
 
         model_file = RAILS_ROOT + '/test/fixtures/' + m.underscore.pluralize + '.yml'
         File.open(model_file, 'w') do |f|
