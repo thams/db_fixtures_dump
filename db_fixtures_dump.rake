@@ -1,7 +1,8 @@
 # Original from http://snippets.dzone.com/posts/show/4468 by MichaelBoutros
 #
-# Fixed to check that models are ActiveRecord::Base models before
-# trying to fetch them from database
+# Optimized version which uses to_yaml for content creation and checks
+# that models are ActiveRecord::Base models before trying to fetch
+# them from database.
 namespace :db do
   namespace :fixtures do
     desc 'Dumps all models into fixtures.'
@@ -20,34 +21,19 @@ namespace :db do
         entries = model.find(:all, :order => 'id ASC')
 
         formatted, increment, tab = '', 1, '  '
-        entries.each do |a|
-          formatted += m + '_' + increment.to_s + ':' + "\n"
-          increment += 1
-
-          a.attributes.each do |column, value|
-            formatted += tab
-
-            match = value.to_s.match(/\n/)
-            if match
-              formatted += column + ': |' + "\n"
-
-              value.to_a.each do |v|
-                formatted += tab + tab + v
-              end
-            else
-              formatted += column + ': ' + value.to_s
-            end
-
-            formatted += "\n"
-          end
-
-          formatted += "\n"
-        end
 
         model_file = RAILS_ROOT + '/test/fixtures/' + m.underscore.pluralize + '.yml'
+        File.open(model_file, 'w') do |f|
+          entries.each do |a|
+            attrs = a.attributes
+            attrs.delete_if{|k,v| v.blank?}
 
-        File.exists?(model_file) ? File.delete(model_file) : nil
-        File.open(model_file, 'w') {|f| f << formatted}
+            output = {m + '_' + increment.to_s => attrs}
+            f << output.to_yaml.gsub(/^--- \n/,'') + "\n"
+
+            increment += 1
+          end
+        end
       end
     end
   end
