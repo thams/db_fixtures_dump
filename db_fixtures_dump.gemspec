@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["thams@thams.com"]
   spec.description   = %q{Rake task to dump all tables into yaml fixtures}
   spec.summary       = %q{Rake task to dump all tables into yaml fixtures}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/thams/db_fixtures_dump"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
