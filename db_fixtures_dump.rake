@@ -3,11 +3,17 @@
 # Optimized version which uses to_yaml for content creation and checks
 # that models are ActiveRecord::Base models before trying to fetch
 # them from database.
+
+# Then forked from https://gist.github.com/iiska/1527911
+#
+# fixed obsolete use of RAILS_ROOT, glob
+# put output in the spec/fixtures directory instead of test/fixtures
+
 namespace :db do
   namespace :fixtures do
     desc 'Dumps all models into fixtures.'
     task :dump => :environment do
-      models = Dir.glob(RAILS_ROOT + '/app/models/**.rb').map do |s|
+      models = Dir.glob(Rails.root + 'app/models/**.rb').map do |s|
         Pathname.new(s).basename.to_s.gsub(/\.rb$/,'').camelize
       end
 
@@ -22,7 +28,8 @@ namespace :db do
 
         increment = 1
 
-        model_file = RAILS_ROOT + '/test/fixtures/' + m.underscore.pluralize + '.yml'
+        # use test/fixtures if you do test:unit
+        model_file = Rails.root + ('spec/fixtures/' + m.underscore.pluralize + '.yml')
         File.open(model_file, 'w') do |f|
           entries.each do |a|
             attrs = a.attributes
