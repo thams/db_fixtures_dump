@@ -1,4 +1,4 @@
-# DbFixturesDump
+# db:fixtures:dump
 
 Adds db:fixtures:dump rake task to dump all tables into yaml fixtures
 
