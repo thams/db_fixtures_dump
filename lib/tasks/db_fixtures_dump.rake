@@ -33,7 +33,7 @@ namespace :db do
         File.open(model_file, 'w') do |f|
           entries.each do |a|
             attrs = a.attributes
-            attrs.delete_if{|k,v| v.blank?}
+            attrs.delete_if{|k,v| v.nil?}
 
             output = {m + '_' + increment.to_s => attrs}
             f << output.to_yaml.gsub(/^--- \n/,'') + "\n"
