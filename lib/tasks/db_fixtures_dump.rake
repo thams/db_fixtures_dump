@@ -8,39 +8,37 @@
 #
 # fixed obsolete use of RAILS_ROOT, glob
 # put output in the spec/fixtures directory instead of test/fixtures
+# honour FIXTURES_PATH just like db:fixtures:load
 
 namespace :db do
   namespace :fixtures do
-    desc 'Dumps all models into fixtures.'
+    desc 'Dumps all models into fixtures. Use FIXTURES_PATH as base dir'
     task :dump => :environment do
       models = Dir.glob(Rails.root + 'app/models/**.rb').map do |s|
         Pathname.new(s).basename.to_s.gsub(/\.rb$/,'').camelize
       end
+      dump_dir = ENV['FIXTURES_PATH'] || "spec/fixtures"
 
       puts "Found models: " + models.join(', ')
+      puts "Dumping to: " + dump_dir
 
       models.each do |m|
         model = m.constantize
         next unless model.ancestors.include?(ActiveRecord::Base)
 
-        puts "Dumping model: " + m
         entries = model.find(:all, :order => 'id ASC')
+        puts "Dumping model: #{m} (#{entries.length} entries)"
 
-        increment = 1
-
-        # use test/fixtures if you do test:unit
-        model_file = Rails.root + ('spec/fixtures/' + m.underscore.pluralize + '.yml')
-        File.open(model_file, 'w') do |f|
-          entries.each do |a|
-            attrs = a.attributes
-            attrs.delete_if{|k,v| v.nil?}
-
-            output = {m + '_' + increment.to_s => attrs}
-            f << output.to_yaml.gsub(/^---\s?\n/,'') + "\n"
-
-            increment += 1
-          end
+        output = {}
+        entries.each_with_index do |entry , index|
+          attrs = entry.attributes
+          attrs.delete_if{|k,v| v.nil?}
+          output[m + '_' + (index + 1).to_s] = attrs
         end
+        model_file = Rails.root + (dump_dir + "/" + m.underscore.pluralize + '.yml')
+        file = File.open(model_file, 'w')
+        file << output.to_yaml
+        file.close #better than relying on gc
       end
     end
   end
