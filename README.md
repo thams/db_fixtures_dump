@@ -24,7 +24,7 @@ Or install it yourself as:
 
 Just like for the db:fixtures:load , you may specify FIXTURES_PATH to be used as the output directory.
 
-  $ FIXTURES_PATH=db/backup rake db:fixtures:dump
+    $ FIXTURES_PATH=db/backup rake db:fixtures:dump
 
 ## Contributing
 
