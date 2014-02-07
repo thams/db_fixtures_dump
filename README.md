@@ -20,6 +20,12 @@ Or install it yourself as:
 
     $ rake db:fixtures:dump
 
+### Output directory
+
+Just like for the db:fixtures:load , you may specify FIXTURES_PATH to be used as the output directory.
+
+    $ FIXTURES_PATH=db/backup rake db:fixtures:dump
+
 ## Contributing
 
 1. Fork it
