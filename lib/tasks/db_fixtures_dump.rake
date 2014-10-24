@@ -26,7 +26,7 @@ namespace :db do
         model = m.constantize
         next unless model.ancestors.include?(ActiveRecord::Base)
 
-        entries = model.find(:all, :order => 'id ASC')
+        entries = model.unscoped.find(:all, :order => 'id ASC')
         puts "Dumping model: #{m} (#{entries.length} entries)"
 
         output = {}
