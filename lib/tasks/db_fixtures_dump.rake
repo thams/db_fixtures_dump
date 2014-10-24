@@ -30,17 +30,18 @@ namespace :db do
 
         # use test/fixtures if you do test:unit
         model_file = Rails.root + ('spec/fixtures/' + m.underscore.pluralize + '.yml')
-        File.open(model_file, 'w') do |f|
-          entries.each do |a|
-            attrs = a.attributes
-            attrs.delete_if{|k,v| v.nil?}
+        output = {}
+        entries.each do |a|
+          attrs = a.attributes
+          attrs.delete_if{|k,v| v.nil?}
 
-            output = {m + '_' + increment.to_s => attrs}
-            f << output.to_yaml.gsub(/^---\s?\n/,'') + "\n"
+          output["#{m}_#{increment}"] = attrs
 
-            increment += 1
-          end
+          increment += 1
         end
+        file = File.open(model_file, 'w')
+        file << output.to_yaml
+        file.close #better than relying on gc
       end
     end
   end
