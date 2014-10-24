@@ -24,7 +24,7 @@ namespace :db do
         next unless model.ancestors.include?(ActiveRecord::Base)
 
         puts "Dumping model: " + m
-        entries = model.all.order('id ASC')
+        entries = model.unscoped.all.order('id ASC')
 
         increment = 1
 
