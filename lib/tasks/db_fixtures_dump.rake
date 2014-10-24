@@ -16,15 +16,16 @@ namespace :db do
       models = Dir.glob(Rails.root + 'app/models/**.rb').map do |s|
         Pathname.new(s).basename.to_s.gsub(/\.rb$/,'').camelize
       end
-
+      dump_dir = ENV['FIXTURES_PATH'] || "spec/fixtures"
       puts "Found models: " + models.join(', ')
+      puts "Dumping to: " + dump_dir
 
       models.each do |m|
         model = m.constantize
         next unless model.ancestors.include?(ActiveRecord::Base)
 
-        puts "Dumping model: " + m
         entries = model.all.order('id ASC')
+        puts "Dumping model: #{m} (#{entries.length} entries)"
 
         increment = 1
 
