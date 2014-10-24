@@ -7,7 +7,7 @@
 # Then forked from https://gist.github.com/iiska/1527911
 #
 # fixed obsolete use of RAILS_ROOT, glob
-# put output in the spec/fixtures directory instead of test/fixtures
+# allow to specify output directory by FIXTURES_PATH
 
 namespace :db do
   namespace :fixtures do
@@ -16,6 +16,7 @@ namespace :db do
       models = Dir.glob(Rails.root + 'app/models/**.rb').map do |s|
         Pathname.new(s).basename.to_s.gsub(/\.rb$/,'').camelize
       end
+      # specify FIXTURES_PATH to test/fixtures if you do test:unit
       dump_dir = ENV['FIXTURES_PATH'] || "spec/fixtures"
       puts "Found models: " + models.join(', ')
       puts "Dumping to: " + dump_dir
@@ -29,8 +30,7 @@ namespace :db do
 
         increment = 1
 
-        # use test/fixtures if you do test:unit
-        model_file = Rails.root + ('spec/fixtures/' + m.underscore.pluralize + '.yml')
+        model_file = Rails.root + (dump_dir + "/" + m.underscore.pluralize + '.yml')
         File.open(model_file, 'w') do |f|
           entries.each do |a|
             attrs = a.attributes
