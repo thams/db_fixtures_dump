@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = DbFixturesDump::VERSION
   spec.authors       = ["Kurt Thams"]
   spec.email         = ["thams@thams.com"]
-  spec.description   = %q{Rake task to dump all tables into yaml fixtures}
-  spec.summary       = %q{Rake task to dump all tables into yaml fixtures}
+  spec.description   = %q{Rake task to dump ActiveRecord tables into yaml fixtures}
+  spec.summary       = %q{Rake task to dump ActiveRecord tables into yaml fixtures. Usage: rake db:fixtures:dump}
   spec.homepage      = "https://github.com/thams/db_fixtures_dump"
   spec.license       = "MIT"
 

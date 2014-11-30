@@ -1,6 +1,8 @@
 # db:fixtures:dump
 
-Adds db:fixtures:dump rake task to dump all tables into yaml fixtures
+Adds db:fixtures:dump rake task to dump all ActiveRecord tables into yaml fixtures
+
+May not work for tables with serialized columns.
 
 ## Installation
 
@@ -38,9 +40,10 @@ Just like for the db:fixtures:load , you may specify FIXTURES_PATH to be used as
 
 Original gists:
 
-http://snippets.dzone.com/posts/show/4468 by MichaelBoutros
-https://gist.github.com/iiska/1527911
+* http://snippets.dzone.com/posts/show/4468 by Michael Boutros
+* https://gist.github.com/iiska/1527911
 
 
-Gemification:
-http://blog.nathanhumbert.com/2010/02/rails-3-loading-rake-tasks-from-gem.html
+Making a rake task into a gem:
+
+* http://blog.nathanhumbert.com/2010/02/rails-3-loading-rake-tasks-from-gem.html
