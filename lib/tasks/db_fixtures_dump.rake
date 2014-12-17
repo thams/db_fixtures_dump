@@ -13,9 +13,12 @@ namespace :db do
   namespace :fixtures do
     desc 'Dumps all models into fixtures.'
     task :dump => :environment do
-      models = Dir.glob(Rails.root + 'app/models/**.rb').map do |s|
-        Pathname.new(s).basename.to_s.gsub(/\.rb$/,'').camelize
+      #this block is needed to load all model classes, also from engines
+      ActiveRecord::Base.connection.tables.each do |t|
+        t.underscore.singularize.camelize.constantize rescue nil
       end
+      models = ActiveRecord::Base.subclasses.map { |c| c.name }
+
       # specify FIXTURES_PATH to test/fixtures if you do test:unit
       dump_dir = ENV['FIXTURES_PATH'] || "spec/fixtures"
       puts "Found models: " + models.join(', ')
@@ -31,7 +34,7 @@ namespace :db do
         increment = 1
 
         # use test/fixtures if you do test:unit
-        model_file = Rails.root + (dump_dir + m.underscore.pluralize + '.yml')
+        model_file = Rails.root.join(dump_dir , m.underscore.pluralize + '.yml')
         output = {}
         entries.each do |a|
           attrs = a.attributes
