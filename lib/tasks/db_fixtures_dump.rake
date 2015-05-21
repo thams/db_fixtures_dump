@@ -18,10 +18,15 @@ namespace :db do
       end
       # specify FIXTURES_PATH to test/fixtures if you do test:unit
       dump_dir = ENV['FIXTURES_PATH'] || "spec/fixtures"
+      excludes = []
+      excludes = ENV['EXCLUDE_MODELS'].split(' ') if ENV['EXCLUDE_MODELS']
       puts "Found models: " + models.join(', ')
+      puts "Excluding: " + excludes.join(', ')
       puts "Dumping to: " + dump_dir
 
       models.each do |m|
+        next if excludes.include?(m)
+
         model = m.constantize
         next unless model.ancestors.include?(ActiveRecord::Base)
 
@@ -31,7 +36,7 @@ namespace :db do
         increment = 1
 
         # use test/fixtures if you do test:unit
-        model_file = Rails.root + (dump_dir + m.underscore.pluralize + '.yml')
+        model_file = File.join(Rails.root, dump_dir, m.underscore.pluralize + '.yml')
         output = {}
         entries.each do |a|
           attrs = a.attributes
