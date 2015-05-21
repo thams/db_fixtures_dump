@@ -31,7 +31,7 @@ namespace :db do
         increment = 1
 
         # use test/fixtures if you do test:unit
-        model_file = Rails.root + (dump_dir + m.underscore.pluralize + '.yml')
+        model_file = File.join(Rails.root, dump_dir, m.underscore.pluralize + '.yml')
         output = {}
         entries.each do |a|
           attrs = a.attributes
