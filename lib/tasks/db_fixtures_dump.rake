@@ -17,7 +17,7 @@ namespace :db do
         Pathname.new(s).basename.to_s.gsub(/\.rb$/,'').camelize
       end
       # specify FIXTURES_PATH to test/fixtures if you do test:unit
-      dump_dir = ENV['FIXTURES_PATH'] || "spec/fixtures"
+      dump_dir = ENV['FIXTURES_PATH'] || "spec/fixtures/"
       excludes = []
       excludes = ENV['EXCLUDE_MODELS'].split(' ') if ENV['EXCLUDE_MODELS']
       puts "Found models: " + models.join(', ')
