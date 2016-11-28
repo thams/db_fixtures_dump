@@ -28,6 +28,16 @@ Just like for the db:fixtures:load , you may specify FIXTURES_PATH to be used as
 
     $ FIXTURES_PATH=db/backup rake db:fixtures:dump
 
+### Excluding models
+
+You can exclude models by specifying a list as EXCLUDE_MODELS.
+
+	$ EXCLUDE_MODELS="MyLegacyModel AnotherOne" rake db:fixtures:dump
+
+Or in combination with FIXTURES_PATH,
+
+	$ EXCLUDE_MODELS="MyLegacyModel AnotherOne" FIXTURES_PATH=test/fixtures rake db:fixtures:dump
+
 ## Contributing
 
 1. Fork it

@@ -15,16 +15,26 @@ namespace :db do
     task :dump => :environment do
       #this block is needed to load all model classes, also from engines
       ActiveRecord::Base.connection.tables.each do |t|
-        t.underscore.singularize.camelize.constantize rescue nil
+        begin
+          t.underscore.singularize.camelize.constantize
+        rescue Exception => e
+          puts "error loading #{t}: #{e.inspect}"
+        end
       end
-      models = ActiveRecord::Base.subclasses.map { |c| c.name }
+
+      models = ActiveRecord::Base.subclasses.map(&:name)
 
       # specify FIXTURES_PATH to test/fixtures if you do test:unit
-      dump_dir = ENV['FIXTURES_PATH'] || "spec/fixtures"
+      dump_dir = ENV['FIXTURES_PATH'] || "spec/fixtures/"
+      excludes = []
+      excludes = ENV['EXCLUDE_MODELS'].split(' ') if ENV['EXCLUDE_MODELS']
       puts "Found models: " + models.join(', ')
+      puts "Excluding: " + excludes.join(', ')
       puts "Dumping to: " + dump_dir
 
       models.each do |m|
+        next if excludes.include?(m)
+
         model = m.constantize
         next unless model.ancestors.include?(ActiveRecord::Base)
 
