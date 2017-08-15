@@ -20,9 +20,13 @@ namespace :db do
       dump_dir = ENV['FIXTURES_PATH'] || "spec/fixtures/"
       excludes = []
       excludes = ENV['EXCLUDE_MODELS'].split(' ') if ENV['EXCLUDE_MODELS']
+      includes = ENV['INCLUDE_MODELS'].split(' ') if ENV['INCLUDE_MODELS']
       puts "Found models: " + models.join(', ')
+      puts "Only including: " + includes.join(', ')
       puts "Excluding: " + excludes.join(', ')
       puts "Dumping to: " + dump_dir
+
+      models = models.select{|m| includes.include?(m)}
 
       models.each do |m|
         next if excludes.include?(m)
