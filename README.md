@@ -38,6 +38,13 @@ Or in combination with FIXTURES_PATH,
 
 	$ EXCLUDE_MODELS="MyLegacyModel AnotherOne" FIXTURES_PATH=test/fixtures rake db:fixtures:dump
 
+
+### Including only some models
+
+You can include only some models by specifying a list as INCLUDE_MODELS.
+
+  $ INCLUDE_MODELS="MyLegacyModel AnotherOne" rake db:fixtures:dump
+
 ## Contributing
 
 1. Fork it
